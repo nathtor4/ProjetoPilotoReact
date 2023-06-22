@@ -1,0 +1,19 @@
+.logo {
+    background-color:var(--cor-primaria);
+    max-width: 30vw;
+    max-height: 20vh
+}
+
+.imagem-logo{
+    max-width: 15vw;
+}
+
+.titulo {
+    color:var(--cor-primaria);
+}
+
+.botao-sair:hover {
+    background-color: var(--cor-primaria)!important;
+    /* color: var(--cor-secundaria)!important;  */
+    fill: var(--cor-secundaria);
+}

@@ -1,0 +1,10 @@
+.nav-link:hover {
+    color: var(--cor-hover)!important;
+    fill: var(--cor-hover);
+}
+
+.texto-menu-link{
+    color: var(--cor-secundaria)!important;
+    fill: var(--cor-secundaria);
+    font-size: 18px;
+}

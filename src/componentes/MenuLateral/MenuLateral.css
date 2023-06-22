@@ -1,0 +1,11 @@
+#side_nav {
+    background-color: var(--cor-primaria);
+    min-height: 84vh;
+    max-width: 30vw;
+} 
+
+.texto-menu, .traco-menu {
+    color: var(--cor-secundaria)!important;
+    fill: var(--cor-secundaria);
+    font-size: 22px;
+}

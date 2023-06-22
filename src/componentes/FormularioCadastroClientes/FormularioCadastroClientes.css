@@ -1,0 +1,15 @@
+.mensagem-erro-checkbox{
+    color: red;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.botao {
+    background-color:var(--cor-primaria)!important;
+    color: var(--cor-secundaria)!important;
+    border-color: var(--cor-primaria)!important;
+}
+
+.botao:hover {
+    color: var(--cor-hover)!important;
+}

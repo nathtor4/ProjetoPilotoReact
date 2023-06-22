@@ -1,0 +1,17 @@
+.title-table  {
+    /* background-color: var(--cor-primaria); */
+    font-weight: 500;
+    color: var(--cor-primaria);
+    font-size: 18px;
+    align-items: center!important;
+}
+
+.table-container {
+    max-height: 300px; /* Defina a altura máxima desejada */
+    overflow: auto;
+}
+
+.fixa-titulo {
+    position: sticky;
+    top: 0;
+}

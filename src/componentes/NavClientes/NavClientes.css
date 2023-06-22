@@ -1,0 +1,18 @@
+.container-principal {
+    min-width: 80%;
+}
+
+.texto-principal {
+    font-weight: 400;
+} 
+
+.abas, .texto-principal  {
+    color: var(--cor-primaria)!important;
+}
+
+.abas:hover {
+    background-color: var(--cor-primaria);
+    border-color:  var(--cor-primaria)!important;
+    color: var(--cor-secundaria)!important; 
+}
+

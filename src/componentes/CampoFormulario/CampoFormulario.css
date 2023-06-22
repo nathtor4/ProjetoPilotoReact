@@ -1,0 +1,15 @@
+.mensagem-erro {
+    color: red;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.required:after {
+    content:" *"; 
+    color: red;
+}
+
+.erro {
+    border-color: red!important;
+    box-shadow: 2px 2px 4px red!important;
+}

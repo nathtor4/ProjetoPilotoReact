@@ -1,0 +1,18 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --fonte-principal: 'Lato', sans-serif;
+
+    --cor-primaria: #000039;
+    --cor-secundaria: #F5EFE6;
+    --cor-hover: #44a4e4ea;
+
+    --cor-texto-principal: #3e3e53;
+}
+
+body {
+    font-family: var(--fonte-principal);
+}
