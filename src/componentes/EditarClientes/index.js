@@ -81,7 +81,7 @@ export default function EditarClientes() {
         };
     
         carregarRegistro();
-      }, [id, reset, navigate]);
+    }, [id, reset, navigate]);
       
 
     const editarCadastro = async (variaveis) => {
