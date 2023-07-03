@@ -3,55 +3,60 @@ import "./PesquisaClientes.css";
 
 import InputMask from 'react-input-mask';
 import TabelaPesquisa from "componentes/TabelaPesquisa";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function PesquisaClientes() {
-
-    const [clientes, setClientes] = useState([]);
-
-    const getClientes = async () => {
-        try {
-            const resposta = await axios.get("https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes/all");
-            const data = resposta.data;
-            console.log(data);
-
-            setClientes(data);
-
-        } catch (error) {
-            console.log(error);
-            
-        }
-    };
-
-    useEffect( () => {
-        getClientes();
-    },[]);
 
     const [pesquisaNome, setPesquisaNome] = useState("");
     const [pesquisaCPF, setPesquisaCPF] = useState("");
     const [clientesFiltrados, setClientesFiltrados] = useState([]);
 
-    const aoPesquisar = (e) => {   
+    const aoPesquisar = async (e) => {   
         e.preventDefault();
-
-        const clientesPesquisados = (
-            clientes.filter((cliente) => (
-                cliente.nome.toLowerCase().includes(pesquisaNome.toLowerCase()) && cliente.cpf.includes(pesquisaCPF)
-            ))
-        )
-        return setClientesFiltrados(clientesPesquisados)
+        try {
+            const resposta = await axios.post("https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes/find", 
+            {nome: pesquisaNome, cpf: pesquisaCPF});
+            const clientesPesquisados = resposta.data;
+            setClientesFiltrados(clientesPesquisados);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const aoDeletar = (id) => {
         axios.delete(`https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes/${id}`)
         .then(response => {
             console.log('Item excluído com sucesso');
-            setClientes(clientes.filter((cliente) => cliente.id !== id));
+            toast.success("Cliente excluído!", 
+                {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                }
+            );
             setClientesFiltrados(clientesFiltrados.filter((cliente) => cliente.id !== id));
         }).catch(error => {
             console.error('Erro ao excluir item:', error);
+            toast.error("Ocorreu algum erro com a API!",
+                {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                }
+            );
         })
     };
 
