@@ -12,14 +12,12 @@ import InputMask from 'react-input-mask';
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export default function EditarClientes() {
 
     const {id} = useParams();
     const navigate = useNavigate();
-    const [enviado, setEnviado] = useState(false);
-
-    const CPFsCadastrados = [];
 
     const schemaDeValidacao = yup.object({
         nome: yup.string().required("Campo obrigatório").min(3, "Mínimo 3 caracteres"),
@@ -27,28 +25,7 @@ export default function EditarClientes() {
         email: yup.string().required("Campo obrigatório").email("E-mail inválido"),
         cpf: yup.string().nullable().required("Campo obrigatório").min(11, "CPF inválido")
         .max(14, "CPF inválido")
-        .test('validacaoCPF', 'CPF inválido', CPFValido)
-        .test('CPFExistente', 'CPF já cadastrado', async function(value) {
-            try {
-                const resposta = await axios.get("https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes/all");
-                const clientesCadastrados =  resposta.data.map((item) => {
-                    return {
-                        cpf: item.cpf,
-                        id: item.id
-                    }
-                });
-                
-                clientesCadastrados.forEach(cliente => {
-                    if(cliente.id !== Number(id)) {
-                        CPFsCadastrados.push(cliente.cpf);
-                    }    
-                });
-
-                return !CPFsCadastrados.includes(value);                              
-            } catch (error) {
-                console.log(error);  
-            }
-        }),
+        .test('validacaoCPF', 'CPF inválido', CPFValido),
         checkboxes: yup.array().required('Selecione pelo menos uma opção').min(1, 'Selecione pelo menos uma opção').transform((value) => (Array.isArray(value) ? value : [])),
     })
 
@@ -65,7 +42,7 @@ export default function EditarClientes() {
                 const response = await axios.get(`https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes/${id}`);
                 const registro = response.data;
                 const { cpf, telefone } = registro;
-        
+
                 reset(registro);
         
                 setCPFValor(cpf || "");
@@ -94,12 +71,36 @@ export default function EditarClientes() {
             "telefone": variaveis.telefone}
 
         console.log(dados);
-
-        await axios.post(`https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes`, 
-            dados
-        ).catch((error) => {
+        
+        try {
+            await axios.post(`https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes`, dados);
+            toast.success("Editado com sucesso!", 
+                {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                }
+            );
+        } catch(error) {
             console.log(error);
-        })
+            toast.error("Ocorreu algum erro com a API!",
+                {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                }
+            );
+        }
     }
 
 
@@ -117,15 +118,7 @@ export default function EditarClientes() {
 
         setCPFValor('')
         setTelefoneValor('')
-        
-        setEnviado(true)
     }
-    
-    useEffect(() => {
-        if (enviado) {
-          navigate("/clientes/pesquisa");
-        }
-    }, [enviado, navigate]);
 
     return(
         <form className="m-5" data-formulario onSubmit={handleSubmit(save)} >
