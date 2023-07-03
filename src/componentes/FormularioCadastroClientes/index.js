@@ -10,10 +10,9 @@ import {CPFValido} from "componentes/ValidaCPF";
 
 import InputMask from 'react-input-mask';
 import axios from "axios";
-
+import { toast } from 'react-toastify';
 
 export default function FormularioCadastroClientes() {
-
 
     const schemaDeValidacao = yup.object({
         nome: yup.string().required("Campo obrigatório").min(3, "Mínimo 3 caracteres"),
@@ -21,16 +20,7 @@ export default function FormularioCadastroClientes() {
         email: yup.string().required("Campo obrigatório").email("E-mail inválido"),
         cpf: yup.string().required("Campo obrigatório").min(11, "CPF inválido")
         .max(14, "CPF inválido")
-        .test('validacaoCPF', 'CPF inválido', CPFValido)
-        .test('CPFExistente', 'CPF já cadastrado', async function(value) {
-            try {
-                const resposta = await axios.get("https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes/all");
-                const CPFsCadastrados =  resposta.data.map((item) => (item.cpf));
-                return !CPFsCadastrados.includes(value)
-            } catch (error) {
-                console.log(error);  
-            }
-        }),
+        .test('validacaoCPF', 'CPF inválido', CPFValido),
         checkboxes: yup.array().required('Selecione pelo menos uma opção').min(1, 'Selecione pelo menos uma opção').transform((value) => (Array.isArray(value) ? value : [])),
     })
 
@@ -49,11 +39,35 @@ export default function FormularioCadastroClientes() {
         
         console.log(dados);
 
-        await axios.post('https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes', 
-            dados
-        ).catch((error) => {
+        try{
+            await axios.post('https://contratos.smedtecnologia.com.br/contratos-service/estag-clientes', dados);
+            toast.success("Cadastrado com sucesso!", 
+                {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                }
+            );
+        } catch(error) {
             console.log(error);
-        })
+            toast.error("Ocorreu algum erro com a API!",
+                {
+                    position: "top-right",
+                    autoClose: 1000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                }
+            );
+        }
     }
 
 
@@ -76,6 +90,7 @@ export default function FormularioCadastroClientes() {
     
     return(
         <form className="m-5" data-formulario onSubmit={handleSubmit(save)} >
+            
             <CampoFormulario 
                 tituloCampo="Nome:"
                 id="name"
