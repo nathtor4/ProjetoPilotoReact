@@ -11,6 +11,7 @@ import { CPFValido } from "componentes/ValidaCPF";
 import InputMask from 'react-input-mask';
 import axios from "axios";
 import { toast } from 'react-toastify';
+import mensagem from "componentes/Mensagem";
 
 export default function FormularioCadastroClientes() {
 
@@ -55,37 +56,10 @@ export default function FormularioCadastroClientes() {
                 }
             );
         } catch (error) {
-           
+
             console.log(error);
 
-            const mensagem = error.response?.data?.message;
-            if (mensagem) {
-                toast.error(mensagem,
-                    {
-                        position: "top-right",
-                        autoClose: 1000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    }
-                );
-            } else {
-                toast.error("Ocorreu um erro no API",
-                    {
-                        position: "top-right",
-                        autoClose: 1000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined,
-                        theme: "light",
-                    }
-                );
-            }
+            mensagem(error);
 
         }
     }
